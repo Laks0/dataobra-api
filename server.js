@@ -18,7 +18,7 @@ app.get("/", (_, res) => {
 });
 
 app.post("/login", (req, res) => {
-	db.query(`SELECT * FROM ${process.env.DB_DATABASE}.usuario WHERE email="${req.body.email}"`, (err, rows) => {
+	db.query(`SELECT * FROM ${process.env.DB}.usuario WHERE email="${req.body.email}";`, (err, rows) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -39,6 +39,29 @@ app.post("/login", (req, res) => {
 		// Si el código llega hasta acá, el usuario existe y la contraseña es correcta
 		res.json(usuario);
 	})
+});
+
+app.post("/presupuesto", (req, res) => {
+	db.query(`INSERT INTO ${process.env.DB}.presupuesto (total, tabla, user_id) VALUES (${req.body.total}, ${req.body.tabla}, ${req.body.user_id});`,
+	(err, row) => {
+		if (err) {
+			console.error(err);
+			return;
+		}
+
+		res.json(row);
+	});
+});
+
+app.get("/presupuesto/:uid", (req, res) => {
+	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE user_id=${req.params.uid};`, (err, rows) => {
+		if (err) {
+			console.error(err);
+			return;
+		}
+
+		res.json(rows);
+	});
 });
 
 require("dotenv").config();
