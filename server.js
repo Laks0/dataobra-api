@@ -42,7 +42,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/presupuesto", (req, res) => {
-	db.query(`INSERT INTO ${process.env.DB}.presupuesto (total, tabla, user_id) VALUES (${req.body.total}, ${req.body.tabla}, ${req.body.user_id});`,
+	db.query(`INSERT INTO ${process.env.DB}.presupuesto (total, tabla, user_id) VALUES (0, "[]", ${req.body.user_id});`,
 	(err, row) => {
 		if (err) {
 			console.error(err);
