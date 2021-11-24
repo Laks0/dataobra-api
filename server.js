@@ -25,14 +25,14 @@ app.post("/login", (req, res) => {
 		}
 
 		if (rows.length == 0) {
-			res.status(400).json( { message: "No existe un usuario con ese correo" } );
+			res.status(400).send("No existe un usuario con ese correo");
 			return;
 		}
 
 		let usuario = rows[0];
 		// Bcrypt compara el hash de la base de datos con la contraseña del query
 		if (!bcrypt.compareSync(req.body.contraseña, usuario.contraseña)) {
-			res.status(400).json( { message: "La contraseña es incorrecta" } );
+			res.status(400).send("Contraseña incorrecta");
 			return;
 		}
 
