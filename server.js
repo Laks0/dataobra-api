@@ -41,15 +41,16 @@ app.post("/login", (req, res) => {
 	})
 });
 
+// POST /presupuesto crea un presupuesto vacío para un usuario por id
 app.post("/presupuesto", (req, res) => {
-	db.query(`INSERT INTO ${process.env.DB}.presupuesto (total, tabla, user_id) VALUES (0, "[]", ${req.body.user_id});`,
+	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, user_id) VALUES (${req.body.nombre}, "[]", ${req.body.user_id});`,
 	(err, row) => {
 		if (err) {
 			console.error(err);
 			return;
 		}
 
-		res.json(row);
+		res.json({p_id: row.data.insertID, nombre: req.body.nombre, tabla: [], total: 0});
 	});
 });
 
