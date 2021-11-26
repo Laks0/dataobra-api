@@ -50,7 +50,7 @@ app.post("/presupuesto", (req, res) => {
 			return;
 		}
 
-		res.json({p_id: row.data.insertID, nombre: req.body.nombre, tabla: [], total: 0});
+		res.json(row);
 	});
 });
 
