@@ -57,11 +57,22 @@ app.post("/presupuesto", (req, res) => {
 app.get("/presupuesto/:uid", (req, res) => {
 	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE user_id=${req.params.uid};`, (err, rows) => {
 		if (err) {
-			console.error(err);
+			res.status(500).send(err);
 			return;
 		}
 
 		res.json(rows);
+	});
+});
+
+app.put("/presupuesto", (req, res) => {
+	db.query(`UPDATE ${process.env.DB}.presupuesto SET "tabla" = '${req.body.tabla}' WHERE ('p_id' = '${req.body.p_id}');`, (err, row) => {
+		if (err) {
+			res.status(500).send(err);
+			return;
+		}
+
+		res.json(row);
 	});
 });
 
