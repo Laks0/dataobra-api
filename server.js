@@ -41,6 +41,18 @@ app.post("/login", (req, res) => {
 	})
 });
 
+// INSERT usuario
+app.post("/usuario", (req, res) => {
+	db.query(`INSERT INTO ${process.env.DB}.usuario (nombre, email, contraseña) VALUES ("${req.body.nombre}", "${req.body.email}", "${req.body.contraseña}");`, (err, row) => {
+		if (err) {
+			res.status(500).send(err);
+			return;
+		}
+
+		res.json(row);
+	});
+});
+
 // POST /presupuesto crea un presupuesto vacío para un usuario por id
 app.post("/presupuesto", (req, res) => {
 	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, user_id) VALUES ("${req.body.nombre}", "[]", ${req.body.user_id});`,
