@@ -43,7 +43,8 @@ app.post("/login", (req, res) => {
 
 // INSERT usuario
 app.post("/usuario", (req, res) => {
-	db.query(`INSERT INTO ${process.env.DB}.usuario (nombre, email, contraseña) VALUES ("${req.body.nombre}", "${req.body.email}", "${req.body.contraseña}");`, (err, row) => {
+	let contraseña = bcrypt.hashSync(req.body.contraseña, 10);
+	db.query(`INSERT INTO ${process.env.DB}.usuario (nombre, email, contraseña) VALUES ("${req.body.nombre}", "${req.body.email}", "${contraseña}");`, (err, row) => {
 		if (err) {
 			res.status(500).send(err);
 			return;
