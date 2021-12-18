@@ -79,7 +79,7 @@ app.get("/presupuesto/:uid", (req, res) => {
 });
 
 app.put("/presupuesto", (req, res) => {
-	db.query(`UPDATE ${process.env.DB}.presupuesto SET tabla = '${req.body.tabla}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
+	db.query(`UPDATE ${process.env.DB}.presupuesto SET total = '${req.body.total}', tabla = '${req.body.tabla}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
 		if (err) {
 			res.status(500).send(err);
 			return;
@@ -88,6 +88,11 @@ app.put("/presupuesto", (req, res) => {
 		res.json(row);
 	});
 });
+
+app.post("/archivo", (req, res) => {
+	console.log(req);
+	res.send(req.body);
+})
 
 require("dotenv").config();
 
