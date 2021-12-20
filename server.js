@@ -1,7 +1,9 @@
-const bcrypt = require("bcryptjs");
-const express = require("express");
+const jwt        = require("jsonwebtoken");
+const bcrypt     = require("bcryptjs");
+const express    = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors       = require("cors");
+const auth       = require("./jwsmiddleware");
 
 const app = express();
 
@@ -20,7 +22,7 @@ app.get("/", (_, res) => {
 app.post("/login", (req, res) => {
 	db.query(`SELECT * FROM ${process.env.DB}.usuario WHERE email="${req.body.email}";`, (err, rows) => {
 		if (err) {
-			console.error(err);
+			res.status(500).send(err);
 			return;
 		}
 
@@ -36,8 +38,10 @@ app.post("/login", (req, res) => {
 			return;
 		}
 
+		let token = jwt.sign({user_id: usuario.u_id}, process.env.SECRET, {expiresIn: "1d"});
+
 		// Si el código llega hasta acá, el usuario existe y la contraseña es correcta
-		res.json(usuario);
+		res.json({usuario: usuario, token: token});
 	})
 });
 
@@ -50,12 +54,13 @@ app.post("/usuario", (req, res) => {
 			return;
 		}
 
-		res.json(row);
+		let token = jwt.sign({user_id: row.insertId}, process.env.SECRET, {expiresIn: "1d"});
+		res.json(token);
 	});
 });
 
 // POST /presupuesto crea un presupuesto vacío para un usuario por id
-app.post("/presupuesto", (req, res) => {
+app.post("/presupuesto", auth, (req, res) => {
 	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, user_id) VALUES ("${req.body.nombre}", "[]", ${req.body.user_id});`,
 	(err, row) => {
 		if (err) {
@@ -67,7 +72,7 @@ app.post("/presupuesto", (req, res) => {
 	});
 });
 
-app.get("/presupuesto/:uid", (req, res) => {
+app.get("/presupuesto/:uid", auth, (req, res) => {
 	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE user_id=${req.params.uid};`, (err, rows) => {
 		if (err) {
 			res.status(500).send(err);
@@ -78,7 +83,7 @@ app.get("/presupuesto/:uid", (req, res) => {
 	});
 });
 
-app.put("/presupuesto", (req, res) => {
+app.put("/presupuesto", auth, (req, res) => {
 	db.query(`UPDATE ${process.env.DB}.presupuesto SET total = '${req.body.total}', tabla = '${req.body.tabla}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
 		if (err) {
 			res.status(500).send(err);
@@ -88,11 +93,6 @@ app.put("/presupuesto", (req, res) => {
 		res.json(row);
 	});
 });
-
-app.post("/archivo", (req, res) => {
-	console.log(req);
-	res.send(req.body);
-})
 
 require("dotenv").config();
 
