@@ -9,13 +9,6 @@ const app = express();
 
 app.use(cors());
 
-app.use(function (_, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", "https://dataobra-presupuesto.herokuapp.com");
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	res.setHeader("Access-Control-Allow-Headers", "auth-token, Origin, X-Requested-With, Content-Type, Accept");
-	next();
-});
-
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
