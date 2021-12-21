@@ -7,7 +7,7 @@ const auth       = require("./jwsmiddleware");
 
 const app = express();
 
-app.use(cors({origin: "*"}));
+app.use(cors({origin: "http://localhost:8080"}));
 
 app.use(bodyParser.json());
 
