@@ -1,17 +1,28 @@
 const jwt        = require("jsonwebtoken");
 const bcrypt     = require("bcryptjs");
-const express    = require("express");
+const express		 = require("express");
 const bodyParser = require("body-parser");
-const cors       = require("cors");
-const auth       = require("./jwsmiddleware");
+const cors			 = require("cors");
+const auth			 = require("./jwsmiddleware");
 
 const app = express();
-
-app.use(cors({origin: "http://localhost:8080"}));
 
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+var whitelist = ['http://localhost:8080', 'https://dataobra-presupuesto.herokuapp.com/']
+var corsOptions = {
+	origin: function (origin, callback) {
+		if (whitelist.indexOf(origin) !== -1 || !origin) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	}
+}
+
+app.use(cors(corsOptions));
 
 const db = require("./database");
 
