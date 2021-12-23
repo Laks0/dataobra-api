@@ -24,6 +24,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.options("*", cors());
+
 const db = require("./database");
 
 app.get("/", (_, res) => {
