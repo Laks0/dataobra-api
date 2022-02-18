@@ -74,6 +74,18 @@ app.post("/presupuesto", auth, (req, res) => {
 	});
 });
 
+app.delete("/presupuesto/:pid", auth, (req, res) => {
+	console.log(req.params.pid);
+	db.query(`DELETE FROM ${process.env.DB}.presupuesto WHERE (p_id='${req.params.pid}');`, (err, rows) => {
+		if (err) {
+			res.status(500).send(err);
+			return;
+		}
+
+		res.json(rows);
+	});
+});
+
 app.get("/presupuesto/:uid", auth, (req, res) => {
 	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE user_id=${req.params.uid};`, (err, rows) => {
 		if (err) {
