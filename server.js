@@ -1,9 +1,9 @@
-const jwt        = require("jsonwebtoken");
-const bcrypt     = require("bcryptjs");
-const express		 = require("express");
-const bodyParser = require("body-parser");
-const cors			 = require("cors");
-const auth			 = require("./jwsmiddleware");
+const jwt          = require("jsonwebtoken");
+const bcrypt       = require("bcryptjs");
+const express		   = require("express");
+const bodyParser   = require("body-parser");
+const cors			   = require("cors");
+const auth			   = require("./jwsmiddleware");
 
 const app = express();
 
@@ -63,7 +63,7 @@ app.post("/usuario", (req, res) => {
 
 // POST /presupuesto crea un presupuesto vacío para un usuario por id
 app.post("/presupuesto", auth, (req, res) => {
-	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, user_id) VALUES ("${req.body.nombre}", "[]", ${req.body.user_id});`,
+	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, static_data, user_id) VALUES ("${req.body.nombre}", "[]", "{}", ${req.body.user_id});`,
 	(err, row) => {
 		if (err) {
 			console.error(err);
@@ -75,7 +75,6 @@ app.post("/presupuesto", auth, (req, res) => {
 });
 
 app.delete("/presupuesto/:pid", auth, (req, res) => {
-	console.log(req.params.pid);
 	db.query(`DELETE FROM ${process.env.DB}.presupuesto WHERE (p_id='${req.params.pid}');`, (err, rows) => {
 		if (err) {
 			res.status(500).send(err);
@@ -98,7 +97,7 @@ app.get("/presupuesto/:uid", auth, (req, res) => {
 });
 
 app.put("/presupuesto", auth, (req, res) => {
-	db.query(`UPDATE ${process.env.DB}.presupuesto SET total = '${req.body.total}', tabla = '${req.body.tabla}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
+	db.query(`UPDATE ${process.env.DB}.presupuesto SET total = '${req.body.total}', tabla = '${req.body.tabla}', static_data = '${req.body.static_data}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
 		if (err) {
 			res.status(500).send(err);
 			return;
