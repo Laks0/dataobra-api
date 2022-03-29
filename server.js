@@ -5,12 +5,15 @@ const bcrypt       = require("bcryptjs");
 const express		   = require("express");
 const bodyParser   = require("body-parser");
 const cors			   = require("cors");
-const auth         = require("./jwsmiddleware");
+const auth         = require("./middleware/authMiddleware");
+const cookieParser = require("cookie-parser");
+const sessionMiddleware = require("./middleware/session");
 
 const presupuestoRouter = require("./routes/presupuesto");
 
 const app = express();
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +23,8 @@ app.use(cors());
 app.options("*", cors());
 
 const db = require("./database");
+
+app.use(sessionMiddleware);
 
 app.get("/", (_, res) => {
 	res.json({mensaje: "Hola!"});
@@ -45,6 +50,7 @@ app.post("/login", (req, res) => {
 		}
 
 		let token = jwt.sign({user_id: usuario.u_id}, process.env.SECRET, {expiresIn: "1d"});
+		req.session.email = usuario.email;
 
 		// Si el código llega hasta acá, el usuario existe y la contraseña es correcta
 		res.json({usuario: usuario, token: token});
