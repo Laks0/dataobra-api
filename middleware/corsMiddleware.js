@@ -1,6 +1,6 @@
 const cors = require("cors");
 
-const whitelist = ["http://localhost:8080"];
+const whitelist = ["http://localhost:8080", "https://dataobra-api.herokuapp.com/"];
 const corsOptions = {
 	credentials: true,
 	origin: (origin, callback) => {
