@@ -18,7 +18,17 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors());
+const whitelist = ["http://localhost:8080"];
+const corsOptions = {
+	credentials: true,
+	origin: (origin, callback) => {
+		if (whitelist.includes(origin))
+			return callback(null, true);
+
+		callback(new Error("CORS error"));
+	},
+};
+app.use(cors(corsOptions));
 
 app.options("*", cors());
 
