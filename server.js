@@ -1,12 +1,12 @@
 require("dotenv").config();
 
-const jwt          = require("jsonwebtoken");
-const bcrypt       = require("bcryptjs");
-const express		   = require("express");
-const bodyParser   = require("body-parser");
-const cors			   = require("cors");
-const auth         = require("./middleware/authMiddleware");
-const cookieParser = require("cookie-parser");
+const jwt               = require("jsonwebtoken");
+const bcrypt            = require("bcryptjs");
+const express		        = require("express");
+const bodyParser        = require("body-parser");
+const auth              = require("./middleware/authMiddleware");
+const cookieParser      = require("cookie-parser");
+const corsMiddleware    = require("./middleware/corsMiddleware");
 const sessionMiddleware = require("./middleware/session");
 
 const presupuestoRouter = require("./routes/presupuesto");
@@ -18,19 +18,7 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const whitelist = ["http://localhost:8080"];
-const corsOptions = {
-	credentials: true,
-	origin: (origin, callback) => {
-		if (whitelist.includes(origin))
-			return callback(null, true);
-
-		callback(new Error("CORS error"));
-	},
-};
-app.use(cors(corsOptions));
-
-app.options("*", cors());
+app.use(corsMiddleware);
 
 const db = require("./database");
 
