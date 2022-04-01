@@ -3,11 +3,16 @@ const router  = express.Router();
 const db      = require("../database");
 const jwt     = require("jsonwebtoken");
 const bcrypt  = require("bcryptjs");
-const auth    = require("../middleware/authMiddleware");
 
 // Devuelve un error si no hay una sesión activa, OK si la hay
-router.post("/logged", auth, (_, res) => {
-	res.status(200).send("OK");
+router.get("/logged", (req, res) => {
+	console.log(req.session);
+	if (!req.session.usuario) {
+		res.json({logged: false});
+		return;
+	}
+
+	res.json({logged: true, usuario: req.session.usuario});
 });
 
 router.post("/login", (req, res) => {
@@ -30,7 +35,7 @@ router.post("/login", (req, res) => {
 		}
 
 		let token = jwt.sign({user_id: usuario.u_id}, process.env.SECRET, {expiresIn: "1d"});
-		req.session.email = usuario.email;
+		req.session.usuario = usuario;
 
 		// Si el código llega hasta acá, el usuario existe y la contraseña es correcta
 		res.json({usuario: usuario, token: token});

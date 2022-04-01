@@ -13,10 +13,10 @@ module.exports = session({
 	store: new RedisStore({ client: redisClient }),
 	secret: process.env.SECRET,
 	saveUninitialized: false,
-	resave: false,
+	resave: process.env.STATE_ENV === "production",
+	proxy: true,
 	cookie: {
-		secure: process.env.HTTPS === "https",
-		httpOnly: true,
-		maxAge: 1000 * 60 * 30, // 30 minutos
+		secure: process.env.STATE_ENV === "production",
+		// maxAge: 1000 * 60 * 30, // 30 minutos
 	},
 });

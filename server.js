@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(corsMiddleware);
 
+app.set("trust proxy", 1);
 app.use(sessionMiddleware);
 
 app.use("/", authRouter);

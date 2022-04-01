@@ -7,7 +7,7 @@ router.post("/", (req, res) => {
 	db.query(`INSERT INTO ${process.env.DB}.presupuesto (nombre, tabla, static_data, user_id) VALUES ("${req.body.nombre}", "[]", "{}", ${req.body.user_id});`,
 	(err, row) => {
 		if (err) {
-			console.error(err);
+			res.status(500).send(err);
 			return;
 		}
 
