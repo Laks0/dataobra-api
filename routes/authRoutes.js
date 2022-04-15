@@ -6,7 +6,6 @@ const bcrypt  = require("bcryptjs");
 
 // Devuelve un error si no hay una sesión activa, OK si la hay
 router.get("/logged", (req, res) => {
-	console.log(req.session);
 	if (!req.session.usuario) {
 		res.json({logged: false});
 		return;

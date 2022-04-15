@@ -16,7 +16,9 @@ module.exports = session({
 	resave: process.env.STATE_ENV === "production",
 	proxy: true,
 	cookie: {
-		secure: process.env.STATE_ENV === "production",
+		sameSite: "none",
+		secure: true,
+		httpOnly: true,
 		// maxAge: 1000 * 60 * 30, // 30 minutos
 	},
 });

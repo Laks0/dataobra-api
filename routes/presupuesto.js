@@ -38,6 +38,7 @@ router.get("/:uid", (req, res) => {
 });
 
 router.put("/", (req, res) => {
+	console.log(req.body);
 	db.query(`UPDATE ${process.env.DB}.presupuesto SET total = '${req.body.total}', tabla = '${req.body.tabla}', static_data = '${req.body.static_data}' WHERE p_id = ${req.body.p_id};`, (err, row) => {
 		if (err) {
 			res.status(500).send(err);
