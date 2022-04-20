@@ -26,8 +26,19 @@ router.delete("/:pid", (req, res) => {
 	});
 });
 
-router.get("/:uid", (req, res) => {
+router.get("/userid/:uid", (req, res) => {
 	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE user_id=${req.params.uid};`, (err, rows) => {
+		if (err) {
+			res.status(500).send(err);
+			return;
+		}
+
+		res.json(rows);
+	});
+});
+
+router.get("/presid/:pid", (req, res) => {
+	db.query(`SELECT * FROM ${process.env.DB}.presupuesto WHERE p_id=${req.params.pid}`, (err, rows) => {
 		if (err) {
 			res.status(500).send(err);
 			return;
