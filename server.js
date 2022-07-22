@@ -10,6 +10,8 @@ const sessionMiddleware = require("./middleware/session");
 const presupuestoRouter = require("./routes/presupuesto");
 const authRouter        = require("./routes/authRoutes");
 
+const contribuidoresRouter = require("./routes/contribuidores");
+
 const app = express();
 
 app.use(cookieParser());
@@ -26,6 +28,8 @@ app.use("/", authRouter);
 
 app.use("/presupuesto", auth);
 app.use("/presupuesto", presupuestoRouter);
+
+app.use("/presupuesto/contribuidores", contribuidoresRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
