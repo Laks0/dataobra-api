@@ -24,12 +24,12 @@ app.use(corsMiddleware);
 app.enable("trust proxy");
 app.use(sessionMiddleware);
 
+app.use("/presupuesto/contribuidores", contribuidoresRouter);
 app.use("/", authRouter);
 
 app.use("/presupuesto", auth);
 app.use("/presupuesto", presupuestoRouter);
 
-app.use("/presupuesto/contribuidores", contribuidoresRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

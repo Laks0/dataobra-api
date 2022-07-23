@@ -19,7 +19,9 @@ router.post("/", (req, res) => {
 
 // GET devuelve todas las relaciones de un presupuesto
 router.get("/:p_id", (req, res) => {
-	db.query(`SELECT * FROM ${process.env.DB}.contribuidores WHERE presupuesto_id=${req.params.p_id};`, (err, rows) => {
+	db.query(`SELECT Usuario.u_id, Usuario.nombre, Usuario.email, Contribuidores.permiso_edicion
+	FROM ${process.env.DB}.contribuidores
+	INNER JOIN ${process.env.DB}.usuario ON contribuidores.user_id = usuario.u_id AND contribuidores.presupuesto_id = ${req.params.p_id}`, (err, rows) => {
 		if (err) {
 			res.status(500).send(err);
 			return;
